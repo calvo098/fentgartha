@@ -75,7 +75,7 @@
             border-radius: 4px;
         }
         
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active {
             color: #0088ff;
             background: rgba(0, 136, 255, 0.1);
             box-shadow: 0 0 15px rgba(0, 136, 255, 0.3);
@@ -131,6 +131,50 @@
             line-height: 1.8;
             margin-bottom: 40px;
             color: #cccccc;
+        }
+        
+        .mission-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .mission-stat {
+            background: rgba(0, 136, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .mission-stat:hover {
+            background: rgba(0, 136, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 136, 255, 0.3);
+        }
+        
+        .stat-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 32px;
+            font-weight: 900;
+            color: #0088ff;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #88ccff;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-desc {
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 500;
         }
         
         .charlie-kirk-order {
@@ -199,42 +243,141 @@
             color: #00ff88;
         }
         
+        .android-status {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .status-label {
+            font-size: 12px;
+            color: #88ccff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .status-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .status-value.operational {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+        
+        .status-value.stable {
+            background: rgba(0, 136, 255, 0.2);
+            color: #0088ff;
+            border: 1px solid #0088ff;
+        }
+        
+        .status-value.active {
+            background: rgba(255, 0, 136, 0.2);
+            color: #ff0088;
+            border: 1px solid #ff0088;
+        }
+        
         /* Interactive Syringe Section */
         .syringe-section {
             margin-top: 40px;
             text-align: center;
         }
         
+        .injection-interface {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 136, 0.3);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
         .syringe-injector {
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         
         .syringe-injector:hover {
             transform: scale(1.1);
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
         }
         
         .inject-button {
             background: linear-gradient(45deg, #ff0088, #8800ff);
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 16px;
+            padding: 20px 40px;
+            font-size: 18px;
             font-weight: 700;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+        
+        .inject-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 0, 136, 0.6);
+            background: linear-gradient(45deg, #ff0066, #aa00ff);
+        }
+        
+        .inject-button:active {
+            transform: translateY(0);
+        }
+        
+        .injection-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 0, 136, 0.3);
+        }
+        
+        .stat-display {
+            text-align: center;
+        }
+        
+        .stat-label {
+            display: block;
+            font-size: 12px;
+            color: #ff88cc;
+            margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         
-        .inject-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 0, 136, 0.4);
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #00ff88;
         }
         
         /* Fent Reactor Section */
@@ -310,7 +453,7 @@
         
         .phases-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
             margin-bottom: 40px;
         }
@@ -326,9 +469,9 @@
         }
         
         .mission-phase:hover {
+            background: rgba(0, 136, 255, 0.2);
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 136, 255, 0.3);
-            background: rgba(0, 136, 255, 0.2);
         }
         
         .phase-number {
@@ -402,6 +545,14 @@
                 font-size: 20px;
             }
             
+            .mission-stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+            
             .nav-links {
                 gap: 15px;
             }
@@ -413,10 +564,6 @@
             
             .reactor-container {
                 flex-direction: column;
-            }
-            
-            .phases-grid {
-                grid-template-columns: 1fr;
             }
         }
         
@@ -440,9 +587,11 @@
         <div class="nav-container">
             <div class="logo">GEORGE DROYD</div>
             <ul class="nav-links">
-                <li><a href="index.html">MISSION BRIEFING</a></li>
+                <li><a href="index.html" class="active">MISSION BRIEFING</a></li>
                 <li><a href="history.html">ORIGINS</a></li>
                 <li><a href="mission.html">AGARTHA OPERATION</a></li>
+                <li><a href="agartha-lore.html">AGARTHA LORE</a></li>
+                <li><a href="reactor-tech.html">REACTOR TECH</a></li>
             </ul>
         </div>
     </nav>
@@ -460,6 +609,24 @@
                         legendary city of Agartha.
                     </p>
                     
+                    <div class="mission-stats-grid">
+                        <div class="mission-stat">
+                            <div class="stat-number">01</div>
+                            <div class="stat-label">PRIMARY OBJECTIVE</div>
+                            <div class="stat-desc">Infiltrate Agartha</div>
+                        </div>
+                        <div class="mission-stat">
+                            <div class="stat-number">50kg</div>
+                            <div class="stat-label">TARGET YIELD</div>
+                            <div class="stat-desc">Pure Fentanyl</div>
+                        </div>
+                        <div class="mission-stat">
+                            <div class="stat-number">72hrs</div>
+                            <div class="stat-label">MISSION WINDOW</div>
+                            <div class="stat-desc">Max Duration</div>
+                        </div>
+                    </div>
+                    
                     <div class="charlie-kirk-order">
                         Your mission is to infiltrate Agartha and locate the ancient fentanyl deposits 
                         that will power our next generation of android operatives. The fate of our 
@@ -473,6 +640,20 @@
                         <div class="power-label">CURRENT POWER LEVEL</div>
                         <div class="power-level">75%</div>
                     </div>
+                    <div class="android-status">
+                        <div class="status-item">
+                            <span class="status-label">Systems:</span>
+                            <span class="status-value operational">OPERATIONAL</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Reactor:</span>
+                            <span class="status-value stable">STABLE</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">AI Core:</span>
+                            <span class="status-value active">ACTIVE</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -484,9 +665,22 @@
             <h2 class="section-title">FENTANYL INJECTION SYSTEM</h2>
             <p class="section-description">Power up George Droyd with synthetic fentanyl from the reactor core</p>
             
-            <img src="https://kimi-web-img.moonshot.cn/img/www.picpedia.org/d902481a1adee92442637cdffccfd5bd2c5960c0.jpg" alt="Medical Syringe" class="syringe-injector">
-            <br>
-            <button class="inject-button" onclick="performInjection(); playInjectSound();">INJECT FENTANYL</button>
+            <div class="injection-interface">
+                <img src="https://kimi-web-img.moonshot.cn/img/www.picpedia.org/d902481a1adee92442637cdffccfd5bd2c5960c0.jpg" alt="Medical Syringe" class="syringe-injector">
+                <br>
+                <button class="inject-button" onclick="performInjection(); playInjectSound();">INJECT FENTANYL</button>
+                
+                <div class="injection-stats">
+                    <div class="stat-display">
+                        <span class="stat-label">Injections Today:</span>
+                        <span class="stat-value" id="injection-count">0</span>
+                    </div>
+                    <div class="stat-display">
+                        <span class="stat-label">Total Power:</span>
+                        <span class="stat-value" id="total-power">75%</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -545,7 +739,41 @@
             </div>
             
             <div class="mission-detail-panel">
-                <p style="text-align: center; color: #88ccff;">Click on a mission phase to view detailed objectives</p>
+                <h3 style="color: #0088ff; margin-bottom: 15px;">CURRENT MISSION STATUS</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h4 style="color: #00ff88; margin-bottom: 10px;">Phase 1: Infiltration</h4>
+                        <p style="color: #cccccc; font-size: 14px; line-height: 1.6;">
+                            George Droyd has successfully entered the primary tunnel system leading to Agartha. 
+                            Initial reconnaissance shows heavy guardian activity in the area. Stealth protocols 
+                            are active and communication is limited to quantum bursts.
+                        </p>
+                        <div style="margin-top: 15px;">
+                            <span style="color: #88ccff; font-size: 12px;">Progress: </span>
+                            <span style="color: #00ff88; font-size: 12px;">65% Complete</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff0088; margin-bottom: 10px;">Threat Assessment</h4>
+                        <p style="color: #cccccc; font-size: 14px; line-height: 1.6;">
+                            Multiple Sentinel Constructs detected in the vicinity of the primary fentanyl deposits. 
+                            Plasma barriers are active and will require careful navigation. Quantum disruptor 
+                            countermeasures are being deployed.
+                        </p>
+                        <div style="margin-top: 15px;">
+                            <span style="color: #ffaa00; font-size: 12px;">Risk Level: ELEVATED</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                    <h4 style="color: #0088ff; margin-bottom: 10px;">Next Objectives</h4>
+                    <ul style="color: #cccccc; font-size: 14px; line-height: 1.8;">
+                        <li>Navigate through guardian patrol zones</li>
+                        <li>Disable secondary plasma barriers</li>
+                        <li>Establish forward operating base</li>
+                        <li>Begin fentanyl deposit identification</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>

@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fent Reactor Technology - Microsoft Advanced Systems</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 26, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 136, 255, 0.3);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 900;
+            color: #0088ff;
+            text-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: #0088ff;
+            background: rgba(0, 136, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            text-align: center;
+            background: url('resources/fent-reactor.png') center/cover;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 26, 0.8);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+        
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #0088ff, #00ff88, #ff0088);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .hero-subtitle {
+            font-size: 24px;
+            color: #88ccff;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+        
+        /* Reactor Overview */
+        .reactor-overview {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #0088ff;
+        }
+        
+        .overview-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .overview-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #cccccc;
+        }
+        
+        .reactor-image {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 136, 255, 0.5);
+        }
+        
+        .key-features {
+            list-style: none;
+            margin-top: 30px;
+        }
+        
+        .key-features li {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(0, 136, 255, 0.1);
+            border-left: 4px solid #0088ff;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .key-features li:hover {
+            background: rgba(0, 136, 255, 0.2);
+            transform: translateX(10px);
+        }
+        
+        .feature-icon {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        /* Technical Specifications */
+        .tech-specs {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .spec-card {
+            background: rgba(0, 136, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .spec-card:hover {
+            background: rgba(0, 136, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 136, 255, 0.3);
+        }
+        
+        .spec-category {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #0088ff;
+            text-align: center;
+        }
+        
+        .spec-list {
+            list-style: none;
+        }
+        
+        .spec-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .spec-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .spec-label {
+            color: #88ccff;
+            font-weight: 400;
+        }
+        
+        .spec-value {
+            color: #ffffff;
+            font-weight: 700;
+            text-align: right;
+        }
+        
+        /* Bill Gates Innovation */
+        .gates-innovation {
+            padding: 80px 0;
+        }
+        
+        .innovation-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .innovation-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #cccccc;
+        }
+        
+        .gates-quote {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .gates-quote::before {
+            content: "BILL GATES ON REACTOR TECHNOLOGY:";
+            display: block;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 15px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            font-style: normal;
+        }
+        
+        .innovation-image {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.5);
+        }
+        
+        /* Performance Metrics */
+        .performance-metrics {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .metrics-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .metrics-chart {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            height: 400px;
+        }
+        
+        .metrics-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .stat-item {
+            background: rgba(0, 136, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            background: rgba(0, 136, 255, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            font-weight: 900;
+            color: #0088ff;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #88ccff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-description {
+            font-size: 12px;
+            color: #cccccc;
+            margin-top: 10px;
+        }
+        
+        /* Safety Protocols */
+        .safety-protocols {
+            padding: 80px 0;
+        }
+        
+        .protocols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .protocol-card {
+            background: rgba(255, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .protocol-card:hover {
+            background: rgba(255, 0, 0, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+        
+        .protocol-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ff0000;
+        }
+        
+        .protocol-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #cccccc;
+            margin-bottom: 20px;
+        }
+        
+        .protocol-steps {
+            list-style: none;
+        }
+        
+        .protocol-steps li {
+            padding: 5px 0;
+            color: #ffaa88;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .protocol-steps li::before {
+            content: '⚠';
+            position: absolute;
+            left: 0;
+            color: #ff0000;
+        }
+        
+        /* Research Timeline */
+        .research-timeline {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            margin-top: 40px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #0088ff, #00ff88, #ff0088);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            padding-right: 50%;
+            text-align: right;
+        }
+        
+        .timeline-item:nth-child(even) {
+            padding-left: 50%;
+            text-align: left;
+        }
+        
+        .timeline-content {
+            background: rgba(0, 136, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-content:hover {
+            background: rgba(0, 136, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 136, 255, 0.3);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid rgba(0, 136, 255, 0.3);
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-right: 10px solid rgba(0, 136, 255, 0.3);
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+        
+        .timeline-date {
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0088ff;
+            margin-bottom: 15px;
+        }
+        
+        .timeline-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        
+        .timeline-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #cccccc;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: #0088ff;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.8);
+            z-index: 2;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 26, 0.9);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 136, 255, 0.3);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-text {
+            color: #88ccff;
+            font-size: 14px;
+        }
+        
+        .microsoft-logo {
+            color: #0088ff;
+            font-weight: 700;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 42px;
+            }
+            
+            .hero-subtitle {
+                font-size: 20px;
+            }
+            
+            .overview-content,
+            .innovation-content,
+            .metrics-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                padding-left: 50px !important;
+                padding-right: 20px !important;
+                text-align: left !important;
+            }
+            
+            .timeline-item .timeline-content::after {
+                left: -10px !important;
+                right: auto !important;
+                border-right: 10px solid rgba(0, 136, 255, 0.3) !important;
+                border-left: none !important;
+            }
+            
+            .timeline-marker {
+                left: 20px !important;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .nav-links a {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">GEORGE DROYD</div>
+            <ul class="nav-links">
+                <li><a href="index.html">MISSION BRIEFING</a></li>
+                <li><a href="history.html">ORIGINS</a></li>
+                <li><a href="mission.html">AGARTHA OPERATION</a></li>
+                <li><a href="agartha-lore.html">AGARTHA LORE</a></li>
+                <li><a href="reactor-tech.html" class="active">REACTOR TECH</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">FENT REACTOR TECHNOLOGY</h1>
+                <p class="hero-subtitle">Microsoft's Revolutionary Energy System</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reactor Overview -->
+    <section class="reactor-overview">
+        <div class="container">
+            <h2 class="section-title">REACTOR OVERVIEW</h2>
+            
+            <div class="overview-content">
+                <div class="overview-text">
+                    <p>
+                        The Microsoft Fent Reactor represents a quantum leap in energy technology, 
+                        harnessing the unique properties of synthetic fentanyl compounds to generate 
+                        clean, sustainable power for advanced android systems.
+                    </p>
+                    
+                    <p>
+                        Developed in partnership with the Bill Gates Foundation, this revolutionary 
+                        reactor core converts fentanyl molecules directly into computational energy 
+                        through a process known as Quantum Narcotic Synthesis (QNS).
+                    </p>
+                    
+                    <ul class="key-features">
+                        <li><span class="feature-icon">⚡</span>2.4 Gigawatt continuous output</li>
+                        <li><span class="feature-icon">🧬</span>99.97% conversion efficiency</li>
+                        <li><span class="feature-icon">🔒</span>Quantum-encrypted safety systems</li>
+                        <li><span class="feature-icon">♻️</span>Self-regenerating fuel cycle</li>
+                        <li><span class="feature-icon">🤖</span>AI-optimized performance</li>
+                    </ul>
+                </div>
+                
+                <img src="resources/fent-reactor.png" alt="Fent Reactor Core" class="reactor-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Specifications -->
+    <section class="tech-specs">
+        <div class="container">
+            <h2 class="section-title">TECHNICAL SPECIFICATIONS</h2>
+            
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <h3 class="spec-category">POWER GENERATION</h3>
+                    <ul class="spec-list">
+                        <li><span class="spec-label">Energy Output:</span> <span class="spec-value">2.4 GW</span></li>
+                        <li><span class="spec-label">Efficiency:</span> <span class="spec-value">99.97%</span></li>
+                        <li><span class="spec-label">Operating Temp:</span> <span class="spec-value">37.5°C</span></li>
+                        <li><span class="spec-label">Fuel Consumption:</span> <span class="spec-value">0.1 ml/hr</span></li>
+                        <li><span class="spec-label">Power Density:</span> <span class="spec-value">10^9 W/m³</span></li>
+                        <li><span class="spec-label">Response Time:</span> <span class="spec-value">&lt;1 ms</span></li>
+                    </ul>
+                </div>
+                
+                <div class="spec-card">
+                    <h3 class="spec-category">SAFETY SYSTEMS</h3>
+                    <ul class="spec-list">
+                        <li><span class="spec-label">Containment Field:</span> <span class="spec-value">Quantum Lock</span></li>
+                        <li><span class="spec-label">Emergency Shutdown:</span> <span class="spec-value">0.01 sec</span></li>
+                        <li><span class="spec-label">Radiation Shielding:</span> <span class="spec-value">100% Effective</span></li>
+                        <li><span class="spec-label">Leak Detection:</span> <span class="spec-value">Molecular Level</span></li>
+                        <li><span class="spec-label">Auto-Isolation:</span> <span class="spec-value">Instant</span></li>
+                        <li><span class="spec-label">Fail-Safe Redundancy:</span> <span class="spec-value">7x Backup</span></li>
+                    </ul>
+                </div>
+                
+                <div class="spec-card">
+                    <h3 class="spec-category">CONTROL SYSTEMS</h3>
+                    <ul class="spec-list">
+                        <li><span class="spec-label">Processor:</span> <span class="spec-value">Quantum Neural Net</span></li>
+                        <li><span class="spec-label">Memory:</span> <span class="spec-value">1 PB Quantum Storage</span></li>
+                        <li><span class="spec-label">Processing Speed:</span> <span class="spec-value">10^15 ops/sec</span></li>
+                        <li><span class="spec-label">AI Integration:</span> <span class="spec-value">Level 4 Consciousness</span></li>
+                        <li><span class="spec-label">Remote Access:</span> <span class="spec-value">Quantum Encrypted</span></li>
+                        <li><span class="spec-label">Diagnostic Cycle:</span> <span class="spec-value">Real-time</span></li>
+                    </ul>
+                </div>
+                
+                <div class="spec-card">
+                    <h3 class="spec-category">PHYSICAL SPECS</h3>
+                    <ul class="spec-list">
+                        <li><span class="spec-label">Core Dimensions:</span> <span class="spec-value">30cm × 30cm × 45cm</span></li>
+                        <li><span class="spec-label">Weight:</span> <span class="spec-value">156 kg</span></li>
+                        <li><span class="spec-label">Material:</span> <span class="spec-value">Quantum Alloy</span></li>
+                        <li><span class="spec-label">Shielding:</span> <span class="spec-value">Multi-layer Composite</span></li>
+                        <li><span class="spec-label">Cooling System:</span> <span class="spec-value">Liquid Nitrogen</span></li>
+                        <li><span class="spec-label">Lifespan:</span> <span class="spec-value">50+ years</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bill Gates Innovation -->
+    <section class="gates-innovation">
+        <div class="container">
+            <h2 class="section-title">BILL GATES INNOVATION</h2>
+            
+            <div class="innovation-content">
+                <div class="innovation-text">
+                    <p>
+                        The revolutionary Fent Reactor technology emerged from Bill Gates' 
+                        early research into quantum computing applications in biological systems. 
+                        His groundbreaking work on the intersection of narcotic chemistry and 
+                        artificial intelligence laid the foundation for this breakthrough.
+                    </p>
+                    
+                    <div class="gates-quote">
+                        The convergence of synthetic consciousness and quantum narcotic synthesis 
+                        represents the next evolutionary leap in both energy production and 
+                        artificial intelligence. George Droyd embodies this convergence.
+                    </div>
+                    
+                    <p>
+                        Gates' vision extended beyond simple energy generation to create a 
+                        symbiotic relationship between the reactor and the android consciousness. 
+                        The fentanyl compounds don't just power the system—they enhance the 
+                        cognitive capabilities of the synthetic mind.
+                    </p>
+                </div>
+                
+                <img src="resources/george-droyd-hero.png" alt="Bill Gates Innovation" class="innovation-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Metrics -->
+    <section class="performance-metrics">
+        <div class="container">
+            <h2 class="section-title">PERFORMANCE METRICS</h2>
+            
+            <div class="metrics-container">
+                <div class="metrics-chart">
+                    <div id="performance-chart" style="width: 100%; height: 100%;"></div>
+                </div>
+                
+                <div class="metrics-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">99.97%</div>
+                        <div class="stat-label">Efficiency Rating</div>
+                        <div class="stat-description">Highest recorded efficiency for any energy system</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-value">0.1ml</div>
+                        <div class="stat-label">Hourly Consumption</div>
+                        <div class="stat-description">Minimal fuel usage per hour of operation</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Years Lifespan</div>
+                        <div class="stat-description">Expected operational lifetime</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety Protocols -->
+    <section class="safety-protocols">
+        <div class="container">
+            <h2 class="section-title">SAFETY PROTOCOLS</h2>
+            
+            <div class="protocols-grid">
+                <div class="protocol-card">
+                    <h3 class="protocol-title">CONTAINMENT PROCEDURES</h3>
+                    <p class="protocol-description">
+                        Multiple redundant containment systems ensure zero leakage of 
+                        fentanyl compounds, protecting both the android and surrounding environment.
+                    </p>
+                    <ul class="protocol-steps">
+                        <li>Quantum field containment</li>
+                        <li>Magnetic bottle isolation</li>
+                        <li>Physical barrier reinforcement</li>
+                        <li>Molecular-level monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="protocol-card">
+                    <h3 class="protocol-title">EMERGENCY SHUTDOWN</h3>
+                    <p class="protocol-description">
+                        Instantaneous shutdown capabilities in case of system instability 
+                        or external threat detection.
+                    </p>
+                    <ul class="protocol-steps">
+                        <li>Automatic threat detection</li>
+                        <li>Immediate fuel isolation</li>
+                        <li>Safe mode activation</li>
+                        <li>System diagnostic initiation</li>
+                    </ul>
+                </div>
+                
+                <div class="protocol-card">
+                    <h3 class="protocol-title">RADIATION SHIELDING</h3>
+                    <p class="protocol-description">
+                        Comprehensive protection against all forms of radiation and 
+                        electromagnetic interference.
+                    </p>
+                    <ul class="protocol-steps">
+                        <li>Multi-layer shielding</li>
+                        <li>Active field generation</li>
+                        <li>Harmonic frequency filtering</li>
+                        <li>Environmental monitoring</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Timeline -->
+    <section class="research-timeline">
+        <div class="container">
+            <h2 class="section-title">RESEARCH TIMELINE</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2020 - Initial Theory</div>
+                        <h3 class="timeline-title">Quantum Narcotic Hypothesis</h3>
+                        <p class="timeline-description">
+                            Bill Gates first proposes the theoretical framework for converting 
+                            fentanyl compounds directly into computational energy through quantum 
+                            mechanical processes.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2021 - Proof of Concept</div>
+                        <h3 class="timeline-title">Laboratory Breakthrough</h3>
+                        <p class="timeline-description">
+                            Microsoft Research achieves the first successful conversion of 
+                            synthetic fentanyl into measurable electrical energy, validating 
+                            the theoretical framework.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2022 - Prototype Development</div>
+                        <h3 class="timeline-title">First Reactor Core</h3>
+                        <p class="timeline-description">
+                            The initial Fent Reactor prototype is constructed, demonstrating 
+                            85% efficiency and stable operation over extended periods.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2023 - Efficiency Breakthrough</div>
+                        <h3 class="timeline-title">Quantum Optimization</h3>
+                        <p class="timeline-description">
+                            Introduction of quantum neural networks increases reactor efficiency 
+                            to 94.7% and enables real-time performance optimization.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2024 - Integration Success</div>
+                        <h3 class="timeline-title">Android Integration</h3>
+                        <p class="timeline-description">
+                            First successful integration of Fent Reactor technology into 
+                            advanced android systems, powering George Droyd's prototype.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">2025 - Current Generation</div>
+                        <h3 class="timeline-title">MK-IV Production</h3>
+                        <p class="timeline-description">
+                            Current reactor achieves 99.97% efficiency and full integration 
+                            with synthetic consciousness, ready for field deployment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">
+                © 2025 Microsoft Corporation & Bill Gates Foundation | 
+                <span class="microsoft-logo">Microsoft Fent Reactor Technology™</span> | 
+                Advanced Android Division
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize charts and animations when DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePerformanceChart();
+            initializeScrollAnimations();
+            initializeTimelineAnimations();
+        });
+
+        // Initialize performance metrics chart
+        function initializePerformanceChart() {
+            const chartDom = document.getElementById('performance-chart');
+            const myChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: 'transparent',
+                title: {
+                    text: 'Reactor Performance Over Time',
+                    textStyle: {
+                        color: '#ffffff',
+                        fontSize: 18
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#0088ff',
+                    textStyle: {
+                        color: '#ffffff'
+                    }
+                },
+                legend: {
+                    data: ['Efficiency', 'Power Output', 'Fuel Consumption'],
+                    textStyle: {
+                        color: '#ffffff'
+                    },
+                    top: 30
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Initial', '6 Months', '1 Year', '18 Months', '2 Years', 'Current'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#ffffff'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#ffffff'
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'Efficiency',
+                        type: 'line',
+                        data: [85, 91, 94.7, 97.2, 98.8, 99.97],
+                        lineStyle: {
+                            color: '#00ff88'
+                        },
+                        itemStyle: {
+                            color: '#00ff88'
+                        },
+                        areaStyle: {
+                            color: 'rgba(0, 255, 136, 0.1)'
+                        }
+                    },
+                    {
+                        name: 'Power Output',
+                        type: 'line',
+                        data: [1.8, 2.0, 2.2, 2.3, 2.35, 2.4],
+                        lineStyle: {
+                            color: '#0088ff'
+                        },
+                        itemStyle: {
+                            color: '#0088ff'
+                        }
+                    },
+                    {
+                        name: 'Fuel Consumption',
+                        type: 'bar',
+                        data: [0.5, 0.3, 0.2, 0.15, 0.12, 0.1],
+                        itemStyle: {
+                            color: '#ff0088'
+                        }
+                    }
+                ]
+            };
+            
+            myChart.setOption(option);
+            
+            // Make chart responsive
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+
+        // Scroll-triggered animations
+        function initializeScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        anime({
+                            targets: entry.target,
+                            opacity: [0, 1],
+                            translateY: [50, 0],
+                            duration: 800,
+                            easing: 'easeOutQuad'
+                        });
+                    }
+                });
+            });
+
+            document.querySelectorAll('.spec-card, .protocol-card, .stat-item').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Timeline animations
+        function initializeTimelineAnimations() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            timelineItems.forEach((item, index) => {
+                anime({
+                    targets: item,
+                    opacity: [0, 1],
+                    translateY: [50, 0],
+                    duration: 800,
+                    easing: 'easeOutQuad',
+                    delay: index * 200
+                });
+            });
+        }
+
+        // P5.js background effects for reactor visualization
+        function setup() {
+            const canvas = createCanvas(windowWidth, windowHeight);
+            canvas.position(0, 0);
+            canvas.style('position', 'fixed');
+            canvas.style('top', '0');
+            canvas.style('left', '0');
+            canvas.style('z-index', '-1');
+        }
+
+        function draw() {
+            // Reactor core visualization
+            background(10, 15, 30);
+            
+            // Central reactor core
+            push();
+            translate(width/2, height/2);
+            
+            // Rotating core
+            rotate(frameCount * 0.01);
+            
+            // Core rings
+            for (let i = 0; i < 3; i++) {
+                stroke(0, 136 + i * 30, 255, 100 - i * 20);
+                strokeWeight(3 - i);
+                noFill();
+                ellipse(0, 0, 100 + i * 40, 100 + i * 40);
+            }
+            
+            // Energy particles
+            for (let i = 0; i < 20; i++) {
+                let angle = (i / 20) * TWO_PI + frameCount * 0.02;
+                let radius = 150 + sin(frameCount * 0.05 + i) * 50;
+                let x = cos(angle) * radius;
+                let y = sin(angle) * radius;
+                
+                fill(0, 255, 136, 150);
+                noStroke();
+                ellipse(x, y, 4, 4);
+            }
+            
+            pop();
+            
+            // Floating data streams
+            for (let i = 0; i < 50; i++) {
+                let x = (noise(i * 0.1, frameCount * 0.005) * width);
+                let y = (noise(i * 0.2, frameCount * 0.003) * height);
+                let size = noise(i * 0.3, frameCount * 0.01) * 2;
+                
+                fill(100, 150, 255, 50);
+                noStroke();
+                ellipse(x, y, size);
+            }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
+</body>
+</html>

@@ -62,42 +62,101 @@ function initializeSyringeInjector() {
     }
 }
 
+let injectionCount = 0;
+
 function performInjection() {
     const syringe = document.querySelector('.syringe-injector');
     const powerLevel = document.querySelector('.power-level');
     const currentPower = parseInt(powerLevel.textContent);
+    const injectionCounter = document.getElementById('injection-count');
+    const totalPowerDisplay = document.getElementById('total-power');
+    
+    // Increment injection count by 2 as requested
+    injectionCount += 2;
+    if (injectionCounter) {
+        injectionCounter.textContent = injectionCount;
+    }
     
     // Animate syringe injection
     anime({
         targets: syringe,
-        translateY: [-10, 0],
-        scale: [1, 1.1, 1],
-        duration: 500,
+        translateY: [-15, 0],
+        scale: [1, 1.2, 1],
+        duration: 600,
         easing: 'easeOutQuad'
     });
     
-    // Update power level
-    const newPower = Math.min(currentPower + 15, 100);
+    // Calculate power increase (diminishing returns after 100%)
+    let powerIncrease = 15;
+    if (currentPower >= 100) {
+        powerIncrease = 5; // Reduced increase after max power
+    }
+    
+    const newPower = Math.min(currentPower + powerIncrease, 150); // Allow overcharging
     powerLevel.textContent = newPower + '%';
+    
+    if (totalPowerDisplay) {
+        totalPowerDisplay.textContent = newPower + '%';
+    }
     
     // Power up George Droyd
     const character = document.querySelector('.george-droyd-character');
     character.classList.add('powered-up');
     
-    // Glow effect
+    // Enhanced glow effect based on power level
+    const brightness = Math.min(1 + (newPower / 100) * 0.5, 2);
     anime({
         targets: '.george-droyd-character',
-        filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)'],
-        duration: 1000,
+        filter: [`brightness(1)`, `brightness(${brightness})`, `brightness(1)`],
+        duration: 1500,
         easing: 'easeInOutQuad'
     });
+    
+    // Create injection particles
+    createInjectionParticles();
     
     // Update reactor status
     updateReactorStatus(newPower);
     
     setTimeout(() => {
         character.classList.remove('powered-up');
-    }, 2000);
+    }, 3000);
+}
+
+// Create particle effects for injection
+function createInjectionParticles() {
+    const container = document.querySelector('.injection-interface');
+    
+    for (let i = 0; i < 10; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '4px';
+        particle.style.height = '4px';
+        particle.style.background = '#00ff88';
+        particle.style.borderRadius = '50%';
+        particle.style.pointerEvents = 'none';
+        particle.style.zIndex = '1000';
+        
+        const rect = container.getBoundingClientRect();
+        particle.style.left = (rect.width / 2) + 'px';
+        particle.style.top = (rect.height / 2) + 'px';
+        
+        container.appendChild(particle);
+        
+        // Animate particle
+        anime({
+            targets: particle,
+            translateX: (Math.random() - 0.5) * 200,
+            translateY: (Math.random() - 0.5) * 200,
+            opacity: [1, 0],
+            scale: [1, 0],
+            duration: 1000,
+            easing: 'easeOutQuad',
+            complete: () => {
+                particle.remove();
+            }
+        });
+    }
 }
 
 // Fent reactor status monitoring
