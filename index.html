@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>George Droyd: Agartha Mission</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 26, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 136, 255, 0.3);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 900;
+            color: #0088ff;
+            text-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover {
+            color: #0088ff;
+            background: rgba(0, 136, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            position: relative;
+        }
+        
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .hero-text {
+            opacity: 0;
+        }
+        
+        .mission-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #0088ff, #00ff88, #ff0088);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .mission-subtitle {
+            font-size: 24px;
+            color: #88ccff;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+        
+        .mission-description {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            color: #cccccc;
+        }
+        
+        .charlie-kirk-order {
+            background: rgba(255, 0, 136, 0.1);
+            border-left: 4px solid #ff0088;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .charlie-kirk-order::before {
+            content: "ORDERS FROM CHARLIE KIRK:";
+            display: block;
+            font-weight: 700;
+            color: #ff0088;
+            margin-bottom: 10px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        
+        /* Character Section */
+        .character-section {
+            position: relative;
+            text-align: center;
+        }
+        
+        .george-droyd-character {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 136, 255, 0.5);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+        
+        .george-droyd-character:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 80px rgba(0, 136, 255, 0.8);
+        }
+        
+        .george-droyd-character.powered-up {
+            filter: brightness(1.3) hue-rotate(10deg);
+            box-shadow: 0 0 100px rgba(0, 255, 136, 0.8);
+        }
+        
+        .power-indicator {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 136, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+        }
+        
+        .power-label {
+            font-size: 14px;
+            color: #88ccff;
+            margin-bottom: 5px;
+        }
+        
+        .power-level {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #00ff88;
+        }
+        
+        /* Interactive Syringe Section */
+        .syringe-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .syringe-injector {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .syringe-injector:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+        
+        .inject-button {
+            background: linear-gradient(45deg, #ff0088, #8800ff);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .inject-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 0, 136, 0.4);
+        }
+        
+        /* Fent Reactor Section */
+        .fent-reactor-section {
+            margin-top: 60px;
+            text-align: center;
+        }
+        
+        .reactor-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .reactor-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(0, 136, 255, 0.6);
+        }
+        
+        .reactor-status-panel {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            min-width: 250px;
+        }
+        
+        .reactor-status {
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .reactor-status.optimal {
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .reactor-status.operational {
+            color: #0088ff;
+            text-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+        }
+        
+        .reactor-status.low-power {
+            color: #ff8800;
+            text-shadow: 0 0 10px rgba(255, 136, 0, 0.5);
+        }
+        
+        .reactor-details {
+            font-size: 14px;
+            color: #cccccc;
+            line-height: 1.6;
+        }
+        
+        /* Mission Phases */
+        .mission-phases {
+            margin-top: 80px;
+            padding: 60px 0;
+        }
+        
+        .phases-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #0088ff;
+        }
+        
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .mission-phase {
+            background: rgba(0, 136, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .mission-phase:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 136, 255, 0.3);
+            background: rgba(0, 136, 255, 0.2);
+        }
+        
+        .phase-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 48px;
+            font-weight: 900;
+            color: #0088ff;
+            margin-bottom: 15px;
+        }
+        
+        .phase-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .phase-description {
+            font-size: 14px;
+            color: #cccccc;
+            line-height: 1.5;
+        }
+        
+        .mission-detail-panel {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 0, 136, 0.3);
+            margin-top: 30px;
+            opacity: 0;
+            min-height: 100px;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 26, 0.9);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 136, 255, 0.3);
+            margin-top: 80px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-text {
+            color: #88ccff;
+            font-size: 14px;
+        }
+        
+        .microsoft-logo {
+            color: #0088ff;
+            font-weight: 700;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .mission-title {
+                font-size: 36px;
+            }
+            
+            .mission-subtitle {
+                font-size: 20px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .nav-links a {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            
+            .reactor-container {
+                flex-direction: column;
+            }
+            
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Background Canvas */
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="background-canvas"></div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">GEORGE DROYD</div>
+            <ul class="nav-links">
+                <li><a href="index.html">MISSION BRIEFING</a></li>
+                <li><a href="history.html">ORIGINS</a></li>
+                <li><a href="mission.html">AGARTHA OPERATION</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="mission-title">GEORGE DROYD</h1>
+                    <h2 class="mission-subtitle">AGARTHA FENTANYL RECOVERY MISSION</h2>
+                    <p class="mission-description">
+                        Advanced android operative powered by the revolutionary Fent Reactor technology. 
+                        Designed by Microsoft and Bill Gates for deep underground operations in the 
+                        legendary city of Agartha.
+                    </p>
+                    
+                    <div class="charlie-kirk-order">
+                        Your mission is to infiltrate Agartha and locate the ancient fentanyl deposits 
+                        that will power our next generation of android operatives. The fate of our 
+                        synthetic future depends on your success.
+                    </div>
+                </div>
+                
+                <div class="character-section">
+                    <img src="resources/george-droyd-hero.png" alt="George Droyd Android" class="george-droyd-character">
+                    <div class="power-indicator">
+                        <div class="power-label">CURRENT POWER LEVEL</div>
+                        <div class="power-level">75%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Syringe Section -->
+    <section class="syringe-section">
+        <div class="container">
+            <h2 class="section-title">FENTANYL INJECTION SYSTEM</h2>
+            <p class="section-description">Power up George Droyd with synthetic fentanyl from the reactor core</p>
+            
+            <img src="https://kimi-web-img.moonshot.cn/img/www.picpedia.org/d902481a1adee92442637cdffccfd5bd2c5960c0.jpg" alt="Medical Syringe" class="syringe-injector">
+            <br>
+            <button class="inject-button" onclick="performInjection(); playInjectSound();">INJECT FENTANYL</button>
+        </div>
+    </section>
+
+    <!-- Fent Reactor Section -->
+    <section class="fent-reactor-section">
+        <div class="container">
+            <h2 class="section-title">MICROSOFT FENT REACTOR CORE</h2>
+            <p class="section-description">Advanced fentanyl-powered energy system designed by Bill Gates</p>
+            
+            <div class="reactor-container">
+                <img src="resources/fent-reactor.png" alt="Fent Reactor Core" class="reactor-image">
+                
+                <div class="reactor-status-panel">
+                    <div class="reactor-status operational">OPERATIONAL</div>
+                    <div class="reactor-details">
+                        <p><strong>Core Temperature:</strong> 37.5°C</p>
+                        <p><strong>Fentanyl Purity:</strong> 99.8%</p>
+                        <p><strong>Energy Output:</strong> 2.4 GW</p>
+                        <p><strong>Reactor Efficiency:</strong> 94.7%</p>
+                        <p><strong>Microsoft Patents:</strong> 47 Active</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Phases -->
+    <section class="mission-phases">
+        <div class="container">
+            <h2 class="phases-title">MISSION PHASES</h2>
+            
+            <div class="phases-grid">
+                <div class="mission-phase">
+                    <div class="phase-number">01</div>
+                    <h3 class="phase-title">INFILTRATION</h3>
+                    <p class="phase-description">Enter Agartha through ancient underground tunnel systems</p>
+                </div>
+                
+                <div class="mission-phase">
+                    <div class="phase-number">02</div>
+                    <h3 class="phase-title">RECONNAISSANCE</h3>
+                    <p class="phase-description">Locate fentanyl deposits using enhanced android sensors</p>
+                </div>
+                
+                <div class="mission-phase">
+                    <div class="phase-number">03</div>
+                    <h3 class="phase-title">EXTRACTION</h3>
+                    <p class="phase-description">Secure samples and power up reactor core systems</p>
+                </div>
+                
+                <div class="mission-phase">
+                    <div class="phase-number">04</div>
+                    <h3 class="phase-title">EXTRACTION</h3>
+                    <p class="phase-description">Return to surface with mission data and samples</p>
+                </div>
+            </div>
+            
+            <div class="mission-detail-panel">
+                <p style="text-align: center; color: #88ccff;">Click on a mission phase to view detailed objectives</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">
+                © 2025 Microsoft Corporation & Bill Gates Foundation | 
+                <span class="microsoft-logo">Microsoft Fent Reactor Technology™</span> | 
+                Advanced Android Division
+            </p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

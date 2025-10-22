@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>George Droyd: Agartha Operation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 26, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 136, 255, 0.3);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 900;
+            color: #0088ff;
+            text-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: #0088ff;
+            background: rgba(0, 136, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            text-align: center;
+            background: url('resources/agartha-underground.png') center/cover;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 26, 0.7);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+        
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #0088ff, #00ff88, #ff0088);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .hero-subtitle {
+            font-size: 24px;
+            color: #88ccff;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+        
+        .mission-status {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            display: inline-block;
+            margin-top: 30px;
+        }
+        
+        .status-label {
+            font-size: 14px;
+            color: #88ccff;
+            margin-bottom: 5px;
+        }
+        
+        .status-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #00ff88;
+        }
+        
+        /* Mission Overview */
+        .mission-overview {
+            padding: 80px 0;
+        }
+        
+        .overview-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #0088ff;
+        }
+        
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .overview-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #cccccc;
+        }
+        
+        .overview-image {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 136, 255, 0.5);
+        }
+        
+        .objectives-list {
+            list-style: none;
+            margin-top: 30px;
+        }
+        
+        .objectives-list li {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(0, 136, 255, 0.1);
+            border-left: 4px solid #0088ff;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .objectives-list li:hover {
+            background: rgba(0, 136, 255, 0.2);
+            transform: translateX(10px);
+        }
+        
+        .objective-number {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: #0088ff;
+            margin-right: 10px;
+        }
+        
+        /* Mission Phases Detail */
+        .phases-detail {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .phases-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #0088ff;
+        }
+        
+        .phase-detail {
+            background: rgba(0, 136, 255, 0.1);
+            margin-bottom: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-detail:hover {
+            background: rgba(0, 136, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 136, 255, 0.3);
+        }
+        
+        .phase-header {
+            padding: 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .phase-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 48px;
+            font-weight: 900;
+            color: #0088ff;
+            margin-right: 20px;
+        }
+        
+        .phase-info {
+            flex: 1;
+        }
+        
+        .phase-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+        
+        .phase-duration {
+            font-size: 14px;
+            color: #88ccff;
+        }
+        
+        .phase-toggle {
+            font-size: 24px;
+            color: #0088ff;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-detail.active .phase-toggle {
+            transform: rotate(180deg);
+        }
+        
+        .phase-content {
+            padding: 0 25px 25px;
+            display: none;
+        }
+        
+        .phase-detail.active .phase-content {
+            display: block;
+        }
+        
+        .phase-description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #cccccc;
+            margin-bottom: 20px;
+        }
+        
+        .phase-tasks {
+            list-style: none;
+        }
+        
+        .phase-tasks li {
+            padding: 8px 0;
+            color: #88ccff;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .phase-tasks li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #0088ff;
+        }
+        
+        /* Equipment Section */
+        .equipment-section {
+            padding: 80px 0;
+        }
+        
+        .equipment-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #0088ff;
+        }
+        
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .equipment-card {
+            background: rgba(0, 136, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .equipment-card:hover {
+            background: rgba(0, 136, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 136, 255, 0.3);
+        }
+        
+        .equipment-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .equipment-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        
+        .equipment-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #cccccc;
+            margin-bottom: 20px;
+        }
+        
+        .equipment-specs {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .equipment-specs li {
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .equipment-specs li:last-child {
+            border-bottom: none;
+        }
+        
+        .spec-label {
+            color: #88ccff;
+        }
+        
+        .spec-value {
+            color: #ffffff;
+            font-weight: 700;
+        }
+        
+        /* Threat Assessment */
+        .threat-assessment {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .threat-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #ff0088;
+        }
+        
+        .threat-level {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .threat-indicator {
+            display: inline-block;
+            padding: 20px 40px;
+            background: rgba(255, 0, 136, 0.2);
+            border: 2px solid #ff0088;
+            border-radius: 15px;
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff0088;
+            text-shadow: 0 0 10px rgba(255, 0, 136, 0.5);
+        }
+        
+        .threat-factors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .threat-factor {
+            background: rgba(255, 0, 136, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 0, 136, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .threat-factor:hover {
+            background: rgba(255, 0, 136, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 0, 136, 0.3);
+        }
+        
+        .threat-factor-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ff0088;
+        }
+        
+        .threat-factor-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #cccccc;
+        }
+        
+        .threat-level-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+        
+        .level-high {
+            background: rgba(255, 0, 0, 0.3);
+            color: #ff0000;
+        }
+        
+        .level-medium {
+            background: rgba(255, 165, 0, 0.3);
+            color: #ffa500;
+        }
+        
+        .level-low {
+            background: rgba(0, 255, 0, 0.3);
+            color: #00ff00;
+        }
+        
+        /* Mission Chart */
+        .mission-chart {
+            padding: 80px 0;
+        }
+        
+        .chart-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #0088ff;
+        }
+        
+        .chart-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            height: 400px;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 26, 0.9);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 136, 255, 0.3);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-text {
+            color: #88ccff;
+            font-size: 14px;
+        }
+        
+        .microsoft-logo {
+            color: #0088ff;
+            font-weight: 700;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 42px;
+            }
+            
+            .hero-subtitle {
+                font-size: 20px;
+            }
+            
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .phase-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .phase-number {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .nav-links a {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">GEORGE DROYD</div>
+            <ul class="nav-links">
+                <li><a href="index.html">MISSION BRIEFING</a></li>
+                <li><a href="history.html">ORIGINS</a></li>
+                <li><a href="mission.html" class="active">AGARTHA OPERATION</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">OPERATION AGARTHA</h1>
+                <p class="hero-subtitle">Deep Underground Fentanyl Recovery Mission</p>
+                
+                <div class="mission-status">
+                    <div class="status-label">MISSION STATUS</div>
+                    <div class="status-value">ACTIVE</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Overview -->
+    <section class="mission-overview">
+        <div class="container">
+            <h2 class="overview-title">MISSION OVERVIEW</h2>
+            
+            <div class="overview-grid">
+                <div class="overview-text">
+                    <p>
+                        George Droyd has been deployed to the legendary underground city of Agartha 
+                        to locate and secure ancient fentanyl deposits. These rare compounds are 
+                        essential for advancing Microsoft's next-generation android technology.
+                    </p>
+                    
+                    <p>
+                        The mission involves navigating through treacherous underground environments, 
+                        avoiding detection by hostile entities, and successfully extracting valuable 
+                        fentanyl samples for reactor analysis and replication.
+                    </p>
+                    
+                    <ul class="objectives-list">
+                        <li><span class="objective-number">01</span>Infiltrate Agartha through primary tunnel system</li>
+                        <li><span class="objective-number">02</span>Locate fentanyl deposits using enhanced sensors</li>
+                        <li><span class="objective-number">03</span>Extract and secure minimum 50kg of raw fentanyl</li>
+                        <li><span class="objective-number">04</span>Return to surface with samples and mission data</li>
+                    </ul>
+                </div>
+                
+                <img src="resources/agartha-underground.png" alt="Agartha Underground City" class="overview-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Phases Detail -->
+    <section class="phases-detail">
+        <div class="container">
+            <h2 class="phases-title">DETAILED MISSION PHASES</h2>
+            
+            <div class="phase-detail">
+                <div class="phase-header" onclick="togglePhase(this)">
+                    <div style="display: flex; align-items: center;">
+                        <div class="phase-number">01</div>
+                        <div class="phase-info">
+                            <div class="phase-title">INFILTRATION</div>
+                            <div class="phase-duration">Duration: 6-8 hours</div>
+                        </div>
+                    </div>
+                    <div class="phase-toggle">▼</div>
+                </div>
+                <div class="phase-content">
+                    <p class="phase-description">
+                        George Droyd will enter Agartha through the ancient tunnel systems 
+                        located beneath the Pacific Northwest. The infiltration requires 
+                        stealth and precision to avoid detection by underground guardians.
+                    </p>
+                    <ul class="phase-tasks">
+                        <li>Navigate through primary access tunnel</li>
+                        <li>Disable security systems with electromagnetic pulse</li>
+                        <li>Maintain radio silence to avoid detection</li>
+                        <li>Establish forward operating base in safe zone</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="phase-detail">
+                <div class="phase-header" onclick="togglePhase(this)">
+                    <div style="display: flex; align-items: center;">
+                        <div class="phase-number">02</div>
+                        <div class="phase-info">
+                            <div class="phase-title">RECONNAISSANCE</div>
+                            <div class="phase-duration">Duration: 12-24 hours</div>
+                        </div>
+                    </div>
+                    <div class="phase-toggle">▼</div>
+                </div>
+                <div class="phase-content">
+                    <p class="phase-description">
+                        Systematic search and identification of fentanyl deposits using 
+                        advanced sensor arrays. Mapping of optimal extraction routes 
+                        and identification of potential threats in the area.
+                    </p>
+                    <ul class="phase-tasks">
+                        <li>Deploy sensor drones for area mapping</li>
+                        <li>Identify primary fentanyl deposit locations</li>
+                        <li>Analyze compound purity and concentration</li>
+                        <li>Plan extraction route with minimal resistance</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="phase-detail">
+                <div class="phase-header" onclick="togglePhase(this)">
+                    <div style="display: flex; align-items: center;">
+                        <div class="phase-number">03</div>
+                        <div class="phase-info">
+                            <div class="phase-title">EXTRACTION</div>
+                            <div class="phase-duration">Duration: 4-6 hours</div>
+                        </div>
+                    </div>
+                    <div class="phase-toggle">▼</div>
+                </div>
+                <div class="phase-content">
+                    <p class="phase-description">
+                        Careful extraction of fentanyl compounds using specialized equipment. 
+                        Samples must be properly contained and secured for transport 
+                        back to the surface laboratory.
+                    </p>
+                    <ul class="phase-tasks">
+                        <li>Extract minimum 50kg of raw fentanyl</li>
+                        <li>Secure samples in containment units</li>
+                        <li>Document extraction locations and quantities</li>
+                        <li>Prepare samples for surface transport</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="phase-detail">
+                <div class="phase-header" onclick="togglePhase(this)">
+                    <div style="display: flex; align-items: center;">
+                        <div class="phase-number">04</div>
+                        <div class="phase-info">
+                            <div class="phase-title">EXTRACTION</div>
+                            <div class="phase-duration">Duration: 8-12 hours</div>
+                        </div>
+                    </div>
+                    <div class="phase-toggle">▼</div>
+                </div>
+                <div class="phase-content">
+                    <p class="phase-description">
+                        Final phase involves successful return to surface with all 
+                        collected samples and mission data. Evacuation route must be 
+                        carefully planned to avoid pursuit or interception.
+                    </p>
+                    <ul class="phase-tasks">
+                        <li>Secure all extracted materials</li>
+                        <li>Transmit mission data to command</li>
+                        <li>Navigate back through tunnel system</li>
+                        <li>Execute surface extraction protocol</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipment Section -->
+    <section class="equipment-section">
+        <div class="container">
+            <h2 class="equipment-title">SPECIALIZED EQUIPMENT</h2>
+            
+            <div class="equipment-grid">
+                <div class="equipment-card">
+                    <div class="equipment-icon">🔬</div>
+                    <h3 class="equipment-name">Fentanyl Detection Array</h3>
+                    <p class="equipment-description">
+                        Advanced sensors capable of detecting fentanyl compounds 
+                        at the molecular level from considerable distances.
+                    </p>
+                    <ul class="equipment-specs">
+                        <li><span class="spec-label">Range:</span> <span class="spec-value">500 meters</span></li>
+                        <li><span class="spec-label">Sensitivity:</span> <span class="spec-value">0.01 ppm</span></li>
+                        <li><span class="spec-label">Power:</span> <span class="spec-value">50 W</span></li>
+                    </ul>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-icon">⚡</div>
+                    <h3 class="equipment-name">Electromagnetic Pulse Unit</h3>
+                    <p class="equipment-description">
+                        Non-lethal EMP device for disabling electronic security 
+                        systems and automated defenses.
+                    </p>
+                    <ul class="equipment-specs">
+                        <li><span class="spec-label">Range:</span> <span class="spec-value">100 meters</span></li>
+                        <li><span class="spec-label">Duration:</span> <span class="spec-value">30 seconds</span></li>
+                        <li><span class="spec-label">Recharge:</span> <span class="spec-value">5 minutes</span></li>
+                    </ul>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-icon">📡</div>
+                    <h3 class="equipment-name">Quantum Communication Array</h3>
+                    <p class="equipment-description">
+                        Secure communication system using quantum entanglement 
+                        for undetectable transmission to command center.
+                    </p>
+                    <ul class="equipment-specs">
+                        <li><span class="spec-label">Range:</span> <span class="spec-value">Unlimited</span></li>
+                        <li><span class="spec-label">Security:</span> <span class="spec-value">Quantum Encrypted</span></li>
+                        <li><span class="spec-label">Bandwidth:</span> <span class="spec-value">1 TB/sec</span></li>
+                    </ul>
+                </div>
+                
+                <div class="equipment-card">
+                    <div class="equipment-icon">🧪</div>
+                    <h3 class="equipment-name">Sample Containment Units</h3>
+                    <p class="equipment-description">
+                        Specialized containers designed to safely transport 
+                        fentanyl compounds without degradation or leakage.
+                    </p>
+                    <ul class="equipment-specs">
+                        <li><span class="spec-label">Capacity:</span> <span class="spec-value">25 kg each</span></li>
+                        <li><span class="spec-label">Preservation:</span> <span class="spec-value">99.9% purity</span></li>
+                        <li><span class="spec-label">Shielding:</span> <span class="spec-value">Lead-lined</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Threat Assessment -->
+    <section class="threat-assessment">
+        <div class="container">
+            <h2 class="threat-title">THREAT ASSESSMENT</h2>
+            
+            <div class="threat-level">
+                <div class="threat-indicator">LEVEL ALPHA</div>
+            </div>
+            
+            <div class="threat-factors">
+                <div class="threat-factor">
+                    <h3 class="threat-factor-title">Underground Guardians</h3>
+                    <p class="threat-factor-description">
+                        Ancient automated defense systems protecting Agartha's 
+                        fentanyl deposits. These mechanisms are highly advanced 
+                        and potentially hostile to intruders.
+                    </p>
+                    <span class="threat-level-indicator level-high">HIGH THREAT</span>
+                </div>
+                
+                <div class="threat-factor">
+                    <h3 class="threat-factor-title">Environmental Hazards</h3>
+                    <p class="threat-factor-description">
+                        Unstable geological formations and toxic atmospheric 
+                        conditions in certain areas of the underground city.
+                    </p>
+                    <span class="threat-level-indicator level-medium">MEDIUM THREAT</span>
+                </div>
+                
+                <div class="threat-factor">
+                    <h3 class="threat-factor-title">Fentanyl Exposure</h3>
+                    <p class="threat-factor-description">
+                        Direct contact with raw fentanyl compounds poses 
+                        significant risk to organic systems. George Droyd's 
+                        synthetic nature provides immunity.
+                    </p>
+                    <span class="threat-level-indicator level-low">LOW THREAT</span>
+                </div>
+                
+                <div class="threat-factor">
+                    <h3 class="threat-factor-title">Communication Interference</h3>
+                    <p class="threat-factor-description">
+                        Unknown electromagnetic fields may disrupt 
+                        communication systems and navigation equipment.
+                    </p>
+                    <span class="threat-level-indicator level-medium">MEDIUM THREAT</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Chart -->
+    <section class="mission-chart">
+        <div class="container">
+            <h2 class="chart-title">MISSION PROGRESS PROJECTION</h2>
+            
+            <div class="chart-container">
+                <div id="mission-chart" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">
+                © 2025 Microsoft Corporation & Bill Gates Foundation | 
+                <span class="microsoft-logo">Microsoft Fent Reactor Technology™</span> | 
+                Advanced Android Division
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize mission chart
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMissionChart();
+            initializePhaseAnimations();
+        });
+
+        // Toggle phase details
+        function togglePhase(header) {
+            const phaseDetail = header.parentElement;
+            const isActive = phaseDetail.classList.contains('active');
+            
+            // Close all phases
+            document.querySelectorAll('.phase-detail').forEach(detail => {
+                detail.classList.remove('active');
+            });
+            
+            // Open clicked phase if it wasn't active
+            if (!isActive) {
+                phaseDetail.classList.add('active');
+            }
+        }
+
+        // Initialize phase animations
+        function initializePhaseAnimations() {
+            const phaseDetails = document.querySelectorAll('.phase-detail');
+            
+            phaseDetails.forEach((phase, index) => {
+                anime({
+                    targets: phase,
+                    opacity: [0, 1],
+                    translateY: [50, 0],
+                    duration: 800,
+                    easing: 'easeOutQuad',
+                    delay: index * 200
+                });
+            });
+        }
+
+        // Initialize mission progress chart
+        function initializeMissionChart() {
+            const chartDom = document.getElementById('mission-chart');
+            const myChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: 'transparent',
+                title: {
+                    text: 'Mission Success Probability',
+                    textStyle: {
+                        color: '#ffffff',
+                        fontSize: 18
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#0088ff',
+                    textStyle: {
+                        color: '#ffffff'
+                    }
+                },
+                legend: {
+                    data: ['Success Rate', 'Risk Level', 'Resource Consumption'],
+                    textStyle: {
+                        color: '#ffffff'
+                    },
+                    top: 30
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#ffffff'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#ffffff'
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'Success Rate',
+                        type: 'line',
+                        data: [95, 87, 92, 89],
+                        lineStyle: {
+                            color: '#00ff88'
+                        },
+                        itemStyle: {
+                            color: '#00ff88'
+                        },
+                        areaStyle: {
+                            color: 'rgba(0, 255, 136, 0.1)'
+                        }
+                    },
+                    {
+                        name: 'Risk Level',
+                        type: 'line',
+                        data: [25, 45, 35, 40],
+                        lineStyle: {
+                            color: '#ff0088'
+                        },
+                        itemStyle: {
+                            color: '#ff0088'
+                        },
+                        areaStyle: {
+                            color: 'rgba(255, 0, 136, 0.1)'
+                        }
+                    },
+                    {
+                        name: 'Resource Consumption',
+                        type: 'bar',
+                        data: [15, 35, 25, 20],
+                        itemStyle: {
+                            color: '#0088ff'
+                        }
+                    }
+                ]
+            };
+            
+            myChart.setOption(option);
+            
+            // Make chart responsive
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+    </script>
+</body>
+</html>
